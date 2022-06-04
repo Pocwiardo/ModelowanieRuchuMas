@@ -2,6 +2,7 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QFont
+import matplotlib.pyplot as plt
 import math
 #import sys
 
@@ -59,17 +60,21 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
     Ax = []
     Bu = []
     w = 2.0 * PI * L / T
-    acc = T/h + 1
-    usin = []
-    usq = []
+    acc = int(T/h) + 1
+    usin = [0] * acc
+    usq = [0] * acc
     usk = M
-    y1 = []
-    y2 = []
+    time = [0] * acc
+    y1 = [0] * acc
+    y2 = [0] * acc
     for i in range(acc):
+        time[i] = i*h
         usin[i] = M * math.sin(w * i * h)
         usq[i] = M if usin[i]>0 else -M
-
+    plt.plot(time, usin)
+    plt.show()
     xi1 = [0] * 4
+
     for i in range(acc):
         Ax = MatxVec(A, xi1)
         Bu = VecxSkal(B, usin[i])
@@ -77,7 +82,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
         C2x = VecxVec(C2, xi1)
         Du = D*usin[i]
         xi = VecplusVec(Ax,Bu)
-        xi=xi*h
+        xi = VecxSkal(xi, h)
         xi=xi1+xi
         xi1=xi
         y1[i]=C1x+Du
@@ -122,8 +127,7 @@ def main():
     mnz.resize(202, 266)
     mnz.move(270,50)
 
-
-
+    wykonanie(1,1,1,1,1,1)
 
 
 
