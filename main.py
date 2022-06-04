@@ -69,10 +69,9 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
     y2 = [0] * acc
     for i in range(acc):
         time[i] = i*h
-        usin[i] = M * math.sin(w * i * h)
+        usin[i] = M * math.sin(w * i * h) + M
         usq[i] = M if usin[i]>0 else -M
-    plt.plot(time, usin)
-    plt.show()
+
     xi1 = [0] * 4
 
     for i in range(acc):
@@ -83,10 +82,13 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
         Du = D*usin[i]
         xi = VecplusVec(Ax,Bu)
         xi = VecxSkal(xi, h)
-        xi=xi1+xi
+        xi= VecplusVec(xi, xi1)
         xi1=xi
         y1[i]=C1x+Du
         y2[i]=C2x+Du
+
+    plt.plot(time, y1)
+    plt.show()
 
 
 def main():
