@@ -59,7 +59,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     C1=[1, 0, 0, 0]
     C2=[0, 1, 0, 0]
     D=0
-    
+
     w = 2.0 * PI * L/ T
     acc = int(T/h) + 1
     time = [0] * acc
@@ -76,20 +76,26 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
             u[i] = M/2 * math.sin(w * i * h) + M/2
 
 
-    xi1 = [0] * 4
+    xi1 = [0] * 4 #stan
+    xip = [0] * 4 #to będzie do metody trapezów
+
 
     for i in range(acc):
         Ax = MatxVec(A, xi1)
         Bu = VecxSkal(B, u[i])
-        C1x = VecxVec(C1, xi1)
-        C2x = VecxVec(C2, xi1)
-        Du = D*u[i]
-        xi = VecplusVec(Ax,Bu)
-        xi = VecxSkal(xi, h)
-        xi= VecplusVec(xi, xi1)
-        xi1=xi
-        y1[i]=C1x+Du
-        y2[i]=C2x+Du
+        #C1x = VecxVec(C1, xi1)
+        #C2x = VecxVec(C2, xi1)
+        #Du = D*u[i]
+        xi = VecplusVec(Ax, Bu) #nowe x'
+        xcalk = VecplusVec(xi, xip)
+        xip=xi
+        xcalk = VecxSkal(xcalk, h/2) #zcałkowanie fragmentu
+        xcalk = VecplusVec(xcalk, xi1) #zsumowanie fragmentu z poprzednią całką (całka w nowym punkcie)
+        xi1 = xcalk
+        #y1[i] = C1x+Du
+        #y2[i] = C2x+Du
+        y1[i] = xi1[0] #ponieważ D=0, a C1= [1 0 0 0], zależność C1x+Du upraszcza się do pierwszego elementu wektora xi
+        y2[i] = xi1[1] #ponieważ D=0, a C1= [0 1 0 0], zależność C1x+Du upraszcza się do drugiego elementu wektora xi
 
     plt.plot(time, u)
     plt.plot(time, y1)
