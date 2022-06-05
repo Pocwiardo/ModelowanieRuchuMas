@@ -7,11 +7,9 @@ import math
 #import sys
 
 PI = 3.14159265
-N = 4
-h = 0.001
+h = 0.001 #krok całkowania
 T = 10.0 #czas symulacji
-L = 2.5 # liczba okresów sygnału sinus w przedziale T
-M = 8.0
+f = 0.4 #częstotliwość
 
 class Wektor(object):
     def __init__(self, a1, a2, a3, a4):
@@ -50,7 +48,7 @@ def VecplusVec(wekt1, wekt2):
 
 
 
-def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
+def wykonanie(m1,m2,k1,k2,b1,b2, przebieg, F):
     A=[[0,0,1,0],
        [0,0,0,1],
        [(-k1-k2)/m1, k2/m1, (-b1-b2)/m1, b2/m1],
@@ -60,7 +58,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     C2=[0, 1, 0, 0]
     D=0
 
-    w = 2.0 * PI * L/ T
+    w = 2.0 * PI * f
     acc = int(T/h) + 1
     time = [0] * acc
     u = [0] * acc
@@ -69,15 +67,15 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     for i in range(acc):
         time[i] = i*h
         if przebieg == 1: #prostokat
-            u[i] = M if math.sin(w * i * h) > 0 else 0
+            u[i] = F if math.sin(w * i * h) > 0 else 0
         elif przebieg == 2: #skok
-            u[i] = M
+            u[i] = F
         elif przebieg == 3: #sinus
-            u[i] = M/2 * math.sin(w * i * h) + M/2
+            u[i] = F/2 * math.sin(w * i * h) + F/2
 
 
     xi1 = [0] * 4 #stan
-    xip = [0] * 4 #to będzie do metody trapezów
+    xip = [0] * 4 #poprzednia wartość x'
 
 
     for i in range(acc):
@@ -100,6 +98,9 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     plt.plot(time, u)
     plt.plot(time, y1)
     plt.plot(time, y2)
+    plt.xlabel('czas t')
+    plt.ylabel('wychylenie x')
+    plt.legend(['u(t)','x1(t)','x2(t)'])
     plt.show()
 
 
@@ -141,18 +142,9 @@ def main():
     mnz.resize(202, 266)
     mnz.move(270,50)
 
-
-
-
-
-
-
     window.show()
-    wykonanie(1, 1, 1, 1, 1, 1, 3)
+    wykonanie(1, 1, 1, 1, 1, 1, 1, 2.0)
     app.exec_()
-
-
-
 
 
 if __name__ == '__main__':
