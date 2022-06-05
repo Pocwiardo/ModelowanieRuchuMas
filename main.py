@@ -59,13 +59,9 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     C1=[1, 0, 0, 0]
     C2=[0, 1, 0, 0]
     D=0
-    Ax = []
-    Bu = []
+    
     w = 2.0 * PI * L/ T
     acc = int(T/h) + 1
-    usin = [0] * acc
-    usq = [0] * acc
-    usk = [0] * acc
     time = [0] * acc
     u = [0] * acc
     y1 = [0] * acc
@@ -146,7 +142,7 @@ def main():
 
 
     window.show()
-    wykonanie(1, 1, 1, 1, 1, 1, 1)
+    wykonanie(1, 1, 1, 1, 1, 1, 3)
     app.exec_()
 
 
