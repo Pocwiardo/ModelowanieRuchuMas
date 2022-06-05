@@ -9,7 +9,7 @@ import math
 PI = 3.14159265
 N = 4
 h = 0.001
-T = 10.0
+T = 10.0 #czas symulacji
 L = 2.5 # liczba okresów sygnału sinus w przedziale T
 M = 8.0
 
@@ -48,7 +48,9 @@ def VecplusVec(wekt1, wekt2):
         w[i] = wekt1[i] + wekt2[i]
     return w
 
-def wykonanie(m1,m2,k1,k2,b1,b2):
+
+
+def wykonanie(m1,m2,k1,k2,b1,b2, przebieg):
     A=[[0,0,1,0],
        [0,0,0,1],
        [(-k1-k2)/m1, k2/m1, (-b1-b2)/m1, b2/m1],
@@ -59,27 +61,33 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
     D=0
     Ax = []
     Bu = []
-    w = 2.0 * PI * L / T
+    w = 2.0 * PI * L/ T
     acc = int(T/h) + 1
     usin = [0] * acc
     usq = [0] * acc
-    usk = M
+    usk = [0] * acc
     time = [0] * acc
+    u = [0] * acc
     y1 = [0] * acc
     y2 = [0] * acc
     for i in range(acc):
         time[i] = i*h
-        usin[i] = M * math.sin(w * i * h) + M
-        usq[i] = M if usin[i]>0 else -M
+        if przebieg == 1: #prostokat
+            u[i] = M if math.sin(w * i * h) > 0 else 0
+        elif przebieg == 2: #skok
+            u[i] = M
+        elif przebieg == 3: #sinus
+            u[i] = M/2 * math.sin(w * i * h) + M/2
+
 
     xi1 = [0] * 4
 
     for i in range(acc):
         Ax = MatxVec(A, xi1)
-        Bu = VecxSkal(B, usin[i])
+        Bu = VecxSkal(B, u[i])
         C1x = VecxVec(C1, xi1)
         C2x = VecxVec(C2, xi1)
-        Du = D*usin[i]
+        Du = D*u[i]
         xi = VecplusVec(Ax,Bu)
         xi = VecxSkal(xi, h)
         xi= VecplusVec(xi, xi1)
@@ -87,7 +95,9 @@ def wykonanie(m1,m2,k1,k2,b1,b2):
         y1[i]=C1x+Du
         y2[i]=C2x+Du
 
+    plt.plot(time, u)
     plt.plot(time, y1)
+    plt.plot(time, y2)
     plt.show()
 
 
@@ -129,13 +139,14 @@ def main():
     mnz.resize(202, 266)
     mnz.move(270,50)
 
-    wykonanie(1,1,1,1,1,1)
+
 
 
 
 
 
     window.show()
+    wykonanie(1, 1, 1, 1, 1, 1, 1)
     app.exec_()
 
 
