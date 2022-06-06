@@ -74,7 +74,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg, F):
             u[i] = F/2 * math.sin(w * i * h) + F/2
 
 
-    xi1 = [0] * 4 #stan
+    xi1 = [1, 2, 0, 0] #stan - warunki początkowe, warto dodać ustawianie ich w oknie na konkretne wartości
     xip = [0] * 4 #poprzednia wartość x'
 
 
