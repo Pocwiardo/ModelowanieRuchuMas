@@ -11,18 +11,6 @@ h = 0.001 #krok całkowania
 T = 10.0 #czas symulacji
 f = 0.4 #częstotliwość
 
-class Wektor(object):
-    def __init__(self, a1, a2, a3, a4):
-        self.a1 = a1
-        self.a2 = a2
-        self.a3 = a3
-        self.a4 = a4
-    def __add__(self, other):
-        return Wektor(self.a1 + other.a1, self.a2 + other.a2, self.a3 + other.a3, self.a4 + other.a4)
-    def __mul__(self, other):
-        return Wektor(self.a1 * other.a1, self.a2 * other.a2, self.a3 * other.a3, self.a4 * other.a4)
-    def __mul__ (self, s):
-        return Wektor(self.a1 * s, self.a2 * s, self.a3 * s, self.a4 * s)
 
 def MatxVec(mac, wekt):
     w = [0] * 4
@@ -59,7 +47,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg, F):
     D=0
 
     w = 2.0 * PI * f
-    acc = int(T/h) + 1
+    acc = int(T/h) + 1 #ilość kroków całkowania, "rozdzielczość" wykresu w pewnym sensie
     time = [0] * acc
     u = [0] * acc
     y1 = [0] * acc
@@ -81,17 +69,12 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg, F):
     for i in range(acc):
         Ax = MatxVec(A, xi1)
         Bu = VecxSkal(B, u[i])
-        #C1x = VecxVec(C1, xi1)
-        #C2x = VecxVec(C2, xi1)
-        #Du = D*u[i]
         xi = VecplusVec(Ax, Bu) #nowe x'
         xcalk = VecplusVec(xi, xip)
         xip=xi
-        xcalk = VecxSkal(xcalk, h/2) #zcałkowanie fragmentu
+        xcalk = VecxSkal(xcalk, h/2)
         xcalk = VecplusVec(xcalk, xi1) #zsumowanie fragmentu z poprzednią całką (całka w nowym punkcie)
         xi1 = xcalk
-        #y1[i] = C1x+Du
-        #y2[i] = C2x+Du
         y1[i] = xi1[0] #ponieważ D=0, a C1= [1 0 0 0], zależność C1x+Du upraszcza się do pierwszego elementu wektora xi
         y2[i] = xi1[1] #ponieważ D=0, a C1= [0 1 0 0], zależność C1x+Du upraszcza się do drugiego elementu wektora xi
 
