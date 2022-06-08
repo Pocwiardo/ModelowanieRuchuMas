@@ -42,10 +42,7 @@ def wykonanie(m1,m2,k1,k2,b1,b2, przebieg, F):
        [(-k1-k2)/m1, k2/m1, (-b1-b2)/m1, b2/m1],
        [k2/m2, -k2/m2, b2/m2, -b2/m2]]
     B=[0,0,0,1/m2]
-    C1=[1, 0, 0, 0]
-    C2=[0, 1, 0, 0]
-    D=0
-
+    
     w = 2.0 * PI * f
     acc = int(T/h) + 1 #ilość kroków całkowania, "rozdzielczość" wykresu w pewnym sensie
     time = [0] * acc
