@@ -2,14 +2,24 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QFont
 import matplotlib.pyplot as plt
-import math
 # import sys
 
 PI = 3.14159265
 h = 0.001  # krok całkowania
 T = 10.0  # czas symulacji
-f = 0.4  # częstotliwość
+f = 1  # częstotliwość
+L = 2.0
 
+def silnia(n):
+    return n*silnia(n-1) if n > 1 else 1
+
+def potega(a, b):
+    return a*potega(a, b-1) if b > 0 else 1
+
+def sinus(x):
+    x %= 2*PI
+    x-=PI
+    return -(x-potega(x,3)/silnia(3)+potega(x,5)/silnia(5)-potega(x,7)/silnia(7)+potega(x,9)/silnia(9))
 
 def MatxVec(mac, wekt):
     w = [0] * 4
@@ -47,7 +57,7 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
          [k2 / m2, -k2 / m2, b2 / m2, -b2 / m2]]
     B = [0, 0, 0, 1 / m2]
 
-    w = 2.0 * PI * f
+    w = 2.0 * PI * L / T
     acc = int(T / h) + 1  # ilość kroków całkowania, "rozdzielczość" wykresu w pewnym sensie
     time = [0] * acc
     u = [0] * acc
@@ -56,11 +66,12 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
     for i in range(acc):
         time[i] = i * h
         if przebieg == 1:  # prostokat
-            u[i] = F if math.sin(w * i * h) > 0 else 0
+            u[i] = F if sinus(w * i * h) > 0 else 0
         elif przebieg == 2:  # skok
             u[i] = F
         elif przebieg == 3:  # sinus
-            u[i] = F / 2 * math.sin(w * i * h) + F / 2
+            u[i] = F / 2 * sinus(w * i * h) + F / 2
+            #u[i] = F / 2 * math.sin(w * i * h) + F / 2
 
     xi1 = [1, 2, 0, 0]  # stan - warunki początkowe, warto dodać ustawianie ich w oknie na konkretne wartości
     xip = [0] * 4  # poprzednia wartość x'
@@ -194,7 +205,7 @@ def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, m1, m2, k1, k2, 
     print(b1)
     print("b2")
     print(b2)
-    wykonanie(m1, m2, k1, k2, b1, b2, 1, 2.0)
+    wykonanie(m1, m2, k1, k2, b1, b2, 3, 2.0)
 
 if __name__ == '__main__':
     main()
