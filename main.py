@@ -98,7 +98,7 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
     plt.show()
 
 
-def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1):
+def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
     # tworzenie aplikacji i okna
     app = QApplication([])
     window = QMainWindow()
@@ -113,22 +113,26 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1):
     # radiobutton od fali prostokatniej
     prost = QRadioButton(window)
     prost.setText("Fala prostokatna")
-    prost.setFont(QFont("Arial", 16))
     prost.setChecked(True)
+    prost.setFont(QFont("Arial", 16))
     prost.resize(300, 40)
     prost.move(5, 50)
+
     # radiobutton od skoku
     skok = QRadioButton(window)
     skok.setText("Skok")
     skok.setFont(QFont("Arial", 16))
     skok.move(5, 100)
     skok.resize(300, 40)
+
+
     # radiobutton od sinusoidy
     sinusoida = QRadioButton(window)
     sinusoida.setText("Sinusoida")
     sinusoida.move(5, 150)
     sinusoida.resize(300, 40)
     sinusoida.setFont(QFont("Arial", 16))
+
     # importowanie i dodanie zdjecia
     mnz = QLabel(window)
     zdjecie = QPixmap("zadanie_6.png")
@@ -174,38 +178,62 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1):
     p_b2 = QTextEdit(window)
     p_b2.setText("1")
     p_b2.move(740, 100)
+    n_sila = QLabel(window)
+    n_sila.setText("Wartosc sily")
+    n_sila.move(860, 25)
+    p_sila = QTextEdit(window)
+    p_sila.setText("2")
+    p_sila.move(860, 50)
     #przycisk zapisania
     zapis = QPushButton(window)
     zapis.setText("Zapisz")
-    zapis.move(860, 75)
+    zapis.move(860, 100)
+
     #po wcisnieciu przycisku wywolanie fukcji  zapis
-    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText())))
+    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()), float(p_sila.toPlainText()), prost, skok, sinusoida))
 
 
 
     window.show()
 
     app.exec_()
-def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2): #przypisywanie wartosci do zmiennych
+def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost, skok, sinusoida): #przypisywanie wartosci do zmiennych
     m1 = wpis_m1
     m2 = wpis_m2
     k1 = wpis_k1
     k2 = wpis_k2
     b1 = wpis_b1
     b2 = wpis_b2
-    print("m1")
+    sila = wpis_sila
+    print("m1:")
     print(m1)
-    print("m2")
+    print("m2:")
     print(m2)
-    print("k1")
+    print("k1:")
     print(k1)
-    print("k2")
+    print("k2:")
     print(k2)
-    print("b1")
+    print("b1:")
     print(b1)
-    print("b2")
+    print("b2:")
     print(b2)
-    wykonanie(m1, m2, k1, k2, b1, b2, 3, 2.0)
+    print("sila:")
+    print(sila)
+    if prost.isChecked() == True:
+        przebieg = 1
+    if skok.isChecked() == True:
+        przebieg = 2
+    if sinusoida.isChecked() == True:
+        przebieg = 3
+    print("przebieg:")
+    print(przebieg)
+    wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
+
+
+
+
+
+
 
 if __name__ == '__main__':
     main()
