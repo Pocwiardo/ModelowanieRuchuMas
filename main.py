@@ -3,7 +3,6 @@ from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QFont
 import matplotlib.pyplot as plt
 import math
-
 # import sys
 
 PI = 3.14159265
@@ -11,14 +10,6 @@ h = 0.001  # krok całkowania
 T = 10.0  # czas symulacji
 f = 0.4  # częstotliwość
 
-def silnia(n):
-    return n*silnia(n-1) if n > 1 else 1
-
-def potega(a, b):
-    return a*potega(a, b-1) if b > 0 else 1
-
-def sinus(x):
-    return x-potega(x,3)/silnia(3)+potega(x,5)/silnia(5)-potega(x,7)/silnia(7)+potega(x,9)/silnia(9)
 
 def MatxVec(mac, wekt):
     w = [0] * 4
@@ -96,7 +87,7 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
     plt.show()
 
 
-def main():
+def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1):
     # tworzenie aplikacji i okna
     app = QApplication([])
     window = QMainWindow()
@@ -133,12 +124,77 @@ def main():
     mnz.setPixmap(zdjecie)
     mnz.resize(202, 266)
     mnz.move(270, 50)
+    #wartosci n do wpisania
+    n_m1 = QLabel(window)
+    n_m1.setText("Wartosc m1")
+    n_m1.move(500, 25)
+    p_m1 = QTextEdit(window)
+    p_m1.setText("1")
+    p_m1.move(500, 50)
+    n_m2 = QLabel(window)
+    n_m2.setText("Wartosc m2")
+    n_m2.move(500, 75)
+    p_m2 = QTextEdit(window)
+    p_m2.setText("1")
+    p_m2.move(500, 100)
+    #wartosci k do wpisania
+    n_k1 = QLabel(window)
+    n_k1.setText("Wartosc k1")
+    n_k1.move(620, 25)
+    p_k1 = QTextEdit(window)
+    p_k1.setText("1")
+    p_k1.move(620, 50)
+    n_k2 = QLabel(window)
+    n_k2.setText("Wartosc k2")
+    n_k2.move(620, 75)
+    p_k2 = QTextEdit(window)
+    p_k2.setText("1")
+    p_k2.move(620, 100)
+    #wartosci b do wpisania
+    n_b1 = QLabel(window)
+    n_b1.setText("Wartosc b1")
+    n_b1.move(740, 25)
+    p_b1 = QTextEdit(window)
+    p_b1.setText("1")
+    p_b1.move(740, 50)
+    n_b2 = QLabel(window)
+    n_b2.setText("Wartosc b2")
+    n_b2.move(740, 75)
+    p_b2 = QTextEdit(window)
+    p_b2.setText("1")
+    p_b2.move(740, 100)
+    #przycisk zapisania
+    zapis = QPushButton(window)
+    zapis.setText("Zapisz")
+    zapis.move(860, 75)
+    #po wcisnieciu przycisku wywolanie fukcji  zapis
+    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()), m1, m2, k1, k2, b1, b2))
+
+
 
     window.show()
-    wykonanie(1, 1, 1, 1, 1, 1, 1, 2.0)
-    app.exec_()
 
+    app.exec_()
+def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, m1, m2, k1, k2, b1, b2): #przypisywanie wartosci do zmiennych
+    m1 = wpis_m1
+    m2 = wpis_m2
+    k1 = wpis_k1
+    k2 = wpis_k2
+    b1 = wpis_b1
+    b2 = wpis_b2
+    print("m1")
+    print(m1)
+    print("m2")
+    print(m2)
+    print("k1")
+    print(k1)
+    print("k2")
+    print(k2)
+    print("b1")
+    print(b1)
+    print("b2")
+    print(b2)
+    wykonanie(m1, m2, k1, k2, b1, b2, 1, 2.0)
 
 if __name__ == '__main__':
     main()
-
