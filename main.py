@@ -73,7 +73,7 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
             u[i] = F / 2 * sinus(w * i * h) + F / 2
             #u[i] = F / 2 * math.sin(w * i * h) + F / 2
 
-    xi1 = [1, 2, 0, 0]  # stan - warunki początkowe, warto dodać ustawianie ich w oknie na konkretne wartości
+    xi1 = [0, 0, 0, 0]  # stan - warunki początkowe, trzeba się zastanowić czy nie oznaczają one czasem już naciągnięcia sprężyn Edit: oznaczają, musi być 0
     xip = [0] * 4  # poprzednia wartość x'
 
     for i in range(acc):
@@ -179,14 +179,14 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1):
     zapis.setText("Zapisz")
     zapis.move(860, 75)
     #po wcisnieciu przycisku wywolanie fukcji  zapis
-    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()), m1, m2, k1, k2, b1, b2))
+    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText())))
 
 
 
     window.show()
 
     app.exec_()
-def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, m1, m2, k1, k2, b1, b2): #przypisywanie wartosci do zmiennych
+def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2): #przypisywanie wartosci do zmiennych
     m1 = wpis_m1
     m2 = wpis_m2
     k1 = wpis_k1
