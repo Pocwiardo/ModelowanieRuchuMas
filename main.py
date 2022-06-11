@@ -1,8 +1,10 @@
 from PyQt5.QtWidgets import *
 from PyQt5.QtGui import QPixmap
 from PyQt5.QtGui import QFont
+from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
+from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 import matplotlib.pyplot as plt
-# import sys
+import sys
 
 PI = 3.14159265
 h = 0.001  # krok całkowania
@@ -71,9 +73,8 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
             u[i] = F
         elif przebieg == 3:  # sinus
             u[i] = F / 2 * sinus(w * i * h) + F / 2
-            #u[i] = F / 2 * math.sin(w * i * h) + F / 2
 
-    xi1 = [0, 0, 0, 0]  # stan - warunki początkowe, trzeba się zastanowić czy nie oznaczają one czasem już naciągnięcia sprężyn Edit: oznaczają, musi być 0
+    xi1 = [0, 0, 0, 0]  # stan - warunki początkowe
     xip = [0] * 4  # poprzednia wartość x'
 
     for i in range(acc):
@@ -94,11 +95,160 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
     plt.plot(time, y2)
     plt.xlabel('czas t')
     plt.ylabel('wychylenie x')
-    plt.legend(['u(t)', 'x1(t)', 'x2(t)'])
+    plt.legend(['x1(t)', 'x2(t)'])
+    plt.grid(True)
     plt.show()
 
+class Window(QDialog):
+    def __init__(self, parent=None):
+        super(Window, self).__init__(parent)
 
-def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
+        self.setGeometry(100, 100, 1280, 720)
+        # a figure instance to plot on
+        self.figure = plt.figure()
+
+        # this is the Canvas Widget that displays the `figure`
+        # it takes the `figure` instance as a parameter to __init__
+        self.canvas = FigureCanvas(self.figure)
+        self.canvas.setMaximumSize(480, 320)
+
+
+        # this is the Navigation widget
+        # it takes the Canvas widget and a parent
+        self.toolbar = NavigationToolbar(self.canvas, self)
+
+        # Just some button connected to `plot` method
+        self.button = QPushButton('Plot')
+        self.button.clicked.connect(self.plot)
+
+        self.napis = QLabel(self)
+        self.napis.setText("Wybierz sygnal Wejsciowy:")
+        self.napis.setFont(QFont("Arial", 20))
+        self.napis.resize(500, 50)
+        self.napis.move(5, 0)
+        # radiobutton od fali prostokatniej
+        self.prost = QRadioButton(self)
+        self.prost.setText("Fala prostokatna")
+        self.prost.setChecked(True)
+        self.prost.setFont(QFont("Arial", 16))
+        self.prost.resize(300, 40)
+        self.prost.move(5, 50)
+        # radiobutton od skoku
+        self.skok = QRadioButton(self)
+        self.skok.setText("Skok")
+        self.skok.setFont(QFont("Arial", 16))
+        self.skok.move(5, 100)
+        self.skok.resize(300, 40)
+        # radiobutton od sinusoidy
+        self.sinusoida = QRadioButton(self)
+        self.sinusoida.setText("Sinusoida")
+        self.sinusoida.move(5, 150)
+        self.sinusoida.resize(300, 40)
+        self.sinusoida.setFont(QFont("Arial", 16))
+
+        # importowanie i dodanie zdjecia
+        mnz = QLabel(self)
+        zdjecie = QPixmap("zadanie_6.png")
+        mnz.setPixmap(zdjecie)
+        mnz.resize(202, 266)
+        mnz.move(270, 50)
+        # wartosci n do wpisania
+        n_m1 = QLabel(self)
+        n_m1.setText("Wartosc m1")
+        n_m1.move(5, 225)
+        p_m1 = QTextEdit(self)
+        p_m1.setText("1")
+        p_m1.move(5, 250)
+        n_m2 = QLabel(self)
+        n_m2.setText("Wartosc m2")
+        n_m2.move(5, 275)
+        p_m2 = QTextEdit(self)
+        p_m2.setText("1")
+        p_m2.move(5, 300)
+        # wartosci k do wpisania
+        n_k1 = QLabel(self)
+        n_k1.setText("Wartosc k1")
+        n_k1.move(620, 25)
+        p_k1 = QTextEdit(self)
+        p_k1.setText("1")
+        p_k1.move(620, 50)
+        n_k2 = QLabel(self)
+        n_k2.setText("Wartosc k2")
+        n_k2.move(620, 75)
+        p_k2 = QTextEdit(self)
+        p_k2.setText("1")
+        p_k2.move(620, 100)
+        # wartosci b do wpisania
+        n_b1 = QLabel(self)
+        n_b1.setText("Wartosc b1")
+        n_b1.move(740, 25)
+        p_b1 = QTextEdit(self)
+        p_b1.setText("1")
+        p_b1.move(740, 50)
+        n_b2 = QLabel(self)
+        n_b2.setText("Wartosc b2")
+        n_b2.move(740, 75)
+        p_b2 = QTextEdit(self)
+        p_b2.setText("1")
+        p_b2.move(740, 100)
+        n_sila = QLabel(self)
+        n_sila.setText("Wartosc sily")
+        n_sila.move(860, 25)
+        p_sila = QTextEdit(self)
+        p_sila.setText("2")
+        p_sila.move(860, 50)
+        # przycisk zapisania
+        zapis = QPushButton(self)
+        zapis.setText("Zapisz")
+        zapis.move(860, 100)
+
+        # po wcisnieciu przycisku wywolanie fukcji  zapis
+        zapis.clicked.connect(
+            lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()),
+                          float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()),
+                          float(p_sila.toPlainText()), self.prost, self.skok, self.sinusoida))
+
+        # po wcisnieciu przycisku wywolanie fukcji  zapis
+        layout = QVBoxLayout()
+        layout.addWidget(self.napis)
+        layout.addWidget(self.prost)
+        layout.addWidget(self.skok)
+        layout.addWidget(self.sinusoida)
+        layout.addWidget(mnz)
+        layout.addWidget(n_m1)
+        layout.addWidget(p_m1)
+        layout.addWidget(n_m2)
+        layout.addWidget(p_m2)
+        layout.addWidget(n_k1)
+        layout.addWidget(p_k1)
+        layout.addWidget(n_k2)
+        layout.addWidget(p_k2)
+        layout.addWidget(self.toolbar)
+        layout.addWidget(self.canvas)
+        layout.addWidget(self.button)
+        self.setLayout(layout)
+
+    def plot(self):
+        ''' plot some random stuff '''
+        # random data
+        data = [i for i in range(10)]
+
+        # instead of ax.hold(False)
+        self.figure.clear()
+
+        # create an axis
+        ax = self.figure.add_subplot(111)
+
+        # discards the old graph
+        # ax.hold(False) # deprecated, see above
+
+        # plot data
+        ax.plot(data, '*-')
+
+        # refresh canvas
+        self.canvas.draw()
+
+def main():
     # tworzenie aplikacji i okna
     app = QApplication([])
     window = QMainWindow()
@@ -126,6 +276,8 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
     skok.resize(300, 40)
 
 
+
+
     # radiobutton od sinusoidy
     sinusoida = QRadioButton(window)
     sinusoida.setText("Sinusoida")
@@ -134,7 +286,7 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
     sinusoida.setFont(QFont("Arial", 16))
 
     # importowanie i dodanie zdjecia
-    mnz = QLabel(window)
+    mnz = QLabel(self)
     zdjecie = QPixmap("zadanie_6.png")
     mnz.setPixmap(zdjecie)
     mnz.resize(202, 266)
@@ -188,6 +340,11 @@ def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
     zapis = QPushButton(window)
     zapis.setText("Zapisz")
     zapis.move(860, 100)
+    figure = plt.figure()
+    canvas = FigureCanvas(figure)
+    layout = QVBoxLayout()
+    layout.addWidget(canvas)
+    window.setLayout(layout)
 
     #po wcisnieciu przycisku wywolanie fukcji  zapis
     zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()), float(p_sila.toPlainText()), prost, skok, sinusoida))
@@ -236,4 +393,8 @@ def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost
 
 
 if __name__ == '__main__':
-    main()
+    app = QApplication(sys.argv)
+
+    main = Window()
+    main.show()
+    sys.exit(app.exec_())
