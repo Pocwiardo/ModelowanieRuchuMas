@@ -12,16 +12,21 @@ T = 10.0  # czas symulacji
 f = 1  # częstotliwość
 L = 2.0
 
+
 def silnia(n):
-    return n*silnia(n-1) if n > 1 else 1
+    return n * silnia(n - 1) if n > 1 else 1
+
 
 def potega(a, b):
-    return a*potega(a, b-1) if b > 0 else 1
+    return a * potega(a, b - 1) if b > 0 else 1
+
 
 def sinus(x):
-    x %= 2*PI
-    x-=PI
-    return -(x-potega(x,3)/silnia(3)+potega(x,5)/silnia(5)-potega(x,7)/silnia(7)+potega(x,9)/silnia(9))
+    x %= 2 * PI
+    x -= PI
+    return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) - potega(x, 7) / silnia(7) + potega(x, 9) / silnia(
+        9))
+
 
 def MatxVec(mac, wekt):
     w = [0] * 4
@@ -90,14 +95,9 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
             0]  # ponieważ D=0, a C1= [1 0 0 0], zależność C1x+Du upraszcza się do pierwszego elementu wektora xi
         y2[i] = xi1[1]  # ponieważ D=0, a C1= [0 1 0 0], zależność C1x+Du upraszcza się do drugiego elementu wektora xi
 
-    plt.plot(time, u)
-    plt.plot(time, y1)
-    plt.plot(time, y2)
-    plt.xlabel('czas t')
-    plt.ylabel('wychylenie x')
-    plt.legend(['x1(t)', 'x2(t)'])
-    plt.grid(True)
-    plt.show()
+    Window.plot(Window, time, u, y1, y2)
+    #plt.show()
+
 
 class Window(QDialog):
     def __init__(self, parent=None):
@@ -110,8 +110,7 @@ class Window(QDialog):
         # this is the Canvas Widget that displays the `figure`
         # it takes the `figure` instance as a parameter to __init__
         self.canvas = FigureCanvas(self.figure)
-        #self.canvas.setMaximumSize(480, 320)
-
+        # self.canvas.setMaximumSize(480, 320)
 
         # this is the Navigation widget
         # it takes the Canvas widget and a parent
@@ -147,113 +146,99 @@ class Window(QDialog):
         self.sinusoida.setFont(QFont("Arial", 16))
 
         # importowanie i dodanie zdjecia
-        mnz = QLabel(self)
+        self.mnz = QLabel(self)
         zdjecie = QPixmap("zadanie_6.png")
-        mnz.setPixmap(zdjecie)
-        mnz.resize(202, 266)
-        mnz.move(270, 50)
+        self.mnz.setPixmap(zdjecie)
+        self.mnz.resize(202, 266)
+        self.mnz.move(270, 50)
         # wartosci n do wpisania
-        n_m1 = QLabel(self)
-        n_m1.setText("Wartosc m1")
-        n_m1.move(5, 225)
-        p_m1 = QLineEdit(self)
-        p_m1.setText("1")
-        p_m1.move(5, 250)
-        n_m2 = QLabel(self)
-        n_m2.setText("Wartosc m2")
-        n_m2.move(5, 275)
-        p_m2 = QLineEdit(self)
-        p_m2.setText("1")
-        p_m2.move(5, 300)
+        self.n_m1 = QLabel(self)
+        self.n_m1.setText("Wartosc m1")
+        self.n_m1.move(5, 225)
+        self.p_m1 = QTextEdit(self)
+        self.p_m1.setText("1")
+        self.p_m1.move(5, 250)
+        self.n_m2 = QLabel(self)
+        self.n_m2.setText("Wartosc m2")
+        self.n_m2.move(5, 275)
+        self.p_m2 = QTextEdit(self)
+        self.p_m2.setText("1")
+        self.p_m2.move(5, 300)
         # wartosci k do wpisania
-        n_k1 = QLabel(self)
-        n_k1.setText("Wartosc k1")
-        n_k1.move(620, 25)
-        p_k1 = QLineEdit(self)
-        p_k1.setText("1")
-        p_k1.move(620, 50)
-        n_k2 = QLabel(self)
-        n_k2.setText("Wartosc k2")
-        n_k2.move(620, 75)
-        p_k2 = QLineEdit(self)
-        p_k2.setText("1")
-        p_k2.move(620, 100)
+        self.n_k1 = QLabel(self)
+        self.n_k1.setText("Wartosc k1")
+        self.n_k1.move(620, 25)
+        self.p_k1 = QTextEdit(self)
+        self.p_k1.setText("1")
+        self.p_k1.move(620, 50)
+        self.n_k2 = QLabel(self)
+        self.n_k2.setText("Wartosc k2")
+        self.n_k2.move(620, 75)
+        self.p_k2 = QTextEdit(self)
+        self.p_k2.setText("1")
+        self.p_k2.move(620, 100)
         # wartosci b do wpisania
-        n_b1 = QLabel(self)
-        n_b1.setText("Wartosc b1")
-        n_b1.move(740, 25)
-        p_b1 = QLineEdit(self)
-        p_b1.setText("1")
-        p_b1.move(740, 50)
-        n_b2 = QLabel(self)
-        n_b2.setText("Wartosc b2")
-        n_b2.move(740, 75)
-        p_b2 = QLineEdit(self)
-        p_b2.setText("1")
-        p_b2.move(740, 100)
-        n_sila = QLabel(self)
-        n_sila.setText("Wartosc sily")
-        n_sila.move(860, 25)
-        p_sila = QLineEdit(self)
-        p_sila.setText("2")
-        p_sila.move(860, 50)
+        self.n_b1 = QLabel(self)
+        self.n_b1.setText("Wartosc b1")
+        self.p_b1 = QTextEdit(self)
+        self.p_b1.setText("1")
+        self.n_b2 = QLabel(self)
+        self.n_b2.setText("Wartosc b2")
+        self.p_b2 = QTextEdit(self)
+        self.p_b2.setText("1")
+        self.n_sila = QLabel(self)
+        self.n_sila.setText("Wartosc sily")
+        self.p_sila = QTextEdit(self)
+        self.p_sila.setText("2")
         # przycisk zapisania
-        zapis = QPushButton(self)
-        zapis.setText("Zapisz")
-        zapis.move(860, 100)
+        self.zapis = QPushButton(self)
+        self.zapis.setText("Zapisz")
+        self.zapis.move(860, 100)
 
         # po wcisnieciu przycisku wywolanie fukcji  zapis
-        zapis.clicked.connect(
-            lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()),
-                          float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()),
-                          float(p_sila.toPlainText()), self.prost, self.skok, self.sinusoida))
+        self.zapis.clicked.connect(
+            lambda: Zapis(float(self.p_m1.toPlainText()), float(self.p_m2.toPlainText()), float(self.p_k1.toPlainText()),
+                          float(self.p_k2.toPlainText()), float(self.p_b1.toPlainText()), float(self.p_b2.toPlainText()),
+                          float(self.p_sila.toPlainText()), self.prost, self.skok, self.sinusoida))
 
-        
         layout = QGridLayout()
         layout.addWidget(self.napis, 0, 0, 1, 4)
         layout.addWidget(self.prost, 1, 0, 1, 2)
         layout.addWidget(self.skok, 2, 0, 1, 2)
         layout.addWidget(self.sinusoida, 3, 0, 1, 2)
-        layout.addWidget(mnz, 1, 2, 3, 2)
-        layout.addWidget(n_m1, 4, 0, 1, 1)
-        layout.addWidget(p_m1, 4, 1, 1, 1)
-        layout.addWidget(n_m2, 4, 2, 1, 1)
-        layout.addWidget(p_m2, 4, 3, 1, 1)
-        layout.addWidget(n_k1, 5, 0, 1, 1)
-        layout.addWidget(p_k1, 5, 1, 1, 1)
-        layout.addWidget(n_k2, 5, 2, 1, 1)
-        layout.addWidget(p_k2, 5, 3, 1, 1)
-        layout.addWidget(n_b1, 6, 0, 1, 1)
-        layout.addWidget(p_b1, 6, 1, 1, 1)
-        layout.addWidget(n_b2, 6, 2, 1, 1)
-        layout.addWidget(p_b2, 6, 3, 1, 1)
-        layout.addWidget(n_sila, 7, 0, 1, 1)
-        layout.addWidget(p_sila, 7, 1, 1, 1)
-        layout.addWidget(zapis, 7, 2, 1, 2)
+        layout.addWidget(self.mnz, 1, 2, 3, 2)
+        layout.addWidget(self.n_m1, 4, 0, 1, 1)
+        layout.addWidget(self.p_m1, 4, 1, 1, 1)
+        layout.addWidget(self.n_m2, 4, 2, 1, 1)
+        layout.addWidget(self.p_m2, 4, 3, 1, 1)
+        layout.addWidget(self.n_k1, 5, 0, 1, 1)
+        layout.addWidget(self.p_k1, 5, 1, 1, 1)
+        layout.addWidget(self.n_k2, 5, 2, 1, 1)
+        layout.addWidget(self.p_k2, 5, 3, 1, 1)
+        layout.addWidget(self.n_b1, 6, 0, 1, 1)
+        layout.addWidget(self.p_b1, 6, 1, 1, 1)
+        layout.addWidget(self.n_b2, 6, 2, 1, 1)
+        layout.addWidget(self.p_b2, 6, 3, 1, 1)
+        layout.addWidget(self.n_sila, 7, 0, 1, 1)
+        layout.addWidget(self.p_sila, 7, 1, 1, 1)
+        layout.addWidget(self.zapis, 7, 2, 1, 2)
         layout.addWidget(self.toolbar, 0, 4)
         layout.addWidget(self.canvas, 1, 4, 5, 1)
         layout.addWidget(self.button, 6, 4)
         self.setLayout(layout)
 
-    def plot(self):
-        ''' plot some random stuff '''
-        # random data
-        data = [i for i in range(10)]
-
-        # instead of ax.hold(False)
+    def plot(self, time, u, y1, y2):
         self.figure.clear()
-
-        # create an axis
-        ax = self.figure.add_subplot(111)
-
-        # discards the old graph
-        # ax.hold(False) # deprecated, see above
-
-        # plot data
-        ax.plot(data, '*-')
-
-        # refresh canvas
+        ax = Window.figure.add_subplot(111)
+        ax.plot(time, u)
+        ax.plot(time, y1)
+        ax.plot(time, y2)
+        ax.xlabel('czas t')
+        ax.ylabel('wychylenie x')
+        ax.legend(['x1(t)', 'x2(t)'])
+        ax.grid(True)
         self.canvas.draw()
+
 
 def main():
     # tworzenie aplikacji i okna
@@ -282,9 +267,6 @@ def main():
     skok.move(5, 100)
     skok.resize(300, 40)
 
-
-
-
     # radiobutton od sinusoidy
     sinusoida = QRadioButton(window)
     sinusoida.setText("Sinusoida")
@@ -298,7 +280,7 @@ def main():
     mnz.setPixmap(zdjecie)
     mnz.resize(202, 266)
     mnz.move(270, 50)
-    #wartosci n do wpisania
+    # wartosci n do wpisania
     n_m1 = QLabel(window)
     n_m1.setText("Wartosc m1")
     n_m1.move(500, 25)
@@ -311,7 +293,7 @@ def main():
     p_m2 = QTextEdit(window)
     p_m2.setText("1")
     p_m2.move(500, 100)
-    #wartosci k do wpisania
+    # wartosci k do wpisania
     n_k1 = QLabel(window)
     n_k1.setText("Wartosc k1")
     n_k1.move(620, 25)
@@ -324,7 +306,7 @@ def main():
     p_k2 = QTextEdit(window)
     p_k2.setText("1")
     p_k2.move(620, 100)
-    #wartosci b do wpisania
+    # wartosci b do wpisania
     n_b1 = QLabel(window)
     n_b1.setText("Wartosc b1")
     n_b1.move(740, 25)
@@ -343,7 +325,7 @@ def main():
     p_sila = QTextEdit(window)
     p_sila.setText("2")
     p_sila.move(860, 50)
-    #przycisk zapisania
+    # przycisk zapisania
     zapis = QPushButton(window)
     zapis.setText("Zapisz")
     zapis.move(860, 100)
@@ -353,15 +335,18 @@ def main():
     layout.addWidget(canvas)
     window.setLayout(layout)
 
-    #po wcisnieciu przycisku wywolanie fukcji  zapis
-    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()), float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()), float(p_sila.toPlainText()), prost, skok, sinusoida))
-
-
+    # po wcisnieciu przycisku wywolanie fukcji  zapis
+    zapis.clicked.connect(lambda: Zapis(float(p_m1.toPlainText()), float(p_m2.toPlainText()), float(p_k1.toPlainText()),
+                                        float(p_k2.toPlainText()), float(p_b1.toPlainText()), float(p_b2.toPlainText()),
+                                        float(p_sila.toPlainText()), prost, skok, sinusoida))
 
     window.show()
 
     app.exec_()
-def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost, skok, sinusoida): #przypisywanie wartosci do zmiennych
+
+
+def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost, skok,
+          sinusoida):  # przypisywanie wartosci do zmiennych
     m1 = wpis_m1
     m2 = wpis_m2
     k1 = wpis_k1
@@ -392,11 +377,6 @@ def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost
     print("przebieg:")
     print(przebieg)
     wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
-
-
-
-
-
 
 
 if __name__ == '__main__':
