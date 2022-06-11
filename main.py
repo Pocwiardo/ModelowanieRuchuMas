@@ -89,16 +89,23 @@ def wykonanie(m1, m2, k1, k2, b1, b2, przebieg, F):
             0]  # ponieważ D=0, a C1= [1 0 0 0], zależność C1x+Du upraszcza się do pierwszego elementu wektora xi
         y2[i] = xi1[1]  # ponieważ D=0, a C1= [0 1 0 0], zależność C1x+Du upraszcza się do drugiego elementu wektora xi
 
+    fig1 = plt.figure("Wejście")
     plt.plot(time, u)
+    plt.xlabel('czas t [s]')
+    plt.ylabel('siła F [N]')
+    plt.legend(['u(t)'])
+    plt.grid()
+    fig2 = plt.figure("Wyjście")
     plt.plot(time, y1)
     plt.plot(time, y2)
-    plt.xlabel('czas t')
-    plt.ylabel('wychylenie x')
-    plt.legend(['u(t)', 'x1(t)', 'x2(t)'])
+    plt.xlabel('czas t [s]')
+    plt.ylabel('wychylenie x [m]')
+    plt.legend(['x1(t)', 'x2(t)'])
+    plt.grid()
     plt.show()
 
 
-def main(m1=1, m2=1, k1=1, k2=1, b1=1, b2=1, przebieg=2):
+def main():
     # tworzenie aplikacji i okna
     app = QApplication([])
     window = QMainWindow()
@@ -228,11 +235,6 @@ def Zapis(wpis_m1, wpis_m2, wpis_k1, wpis_k2, wpis_b1, wpis_b2, wpis_sila, prost
     print("przebieg:")
     print(przebieg)
     wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
-
-
-
-
-
 
 
 if __name__ == '__main__':
