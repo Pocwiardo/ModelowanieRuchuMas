@@ -29,7 +29,7 @@ def sinus(x):
 
 def mcosinus(x): #ponieważ w poleceniu jako sinus ze składową stałą umieszczony jest tak naprawdę minus cosinus,
     x %= 2 * PI  #i jest on również bardziej realistycznym pobudzeniem, został on tutaj również zaimplementowany
-    x -= PI      #należy go odkomentować w 213 linijce i zakomentować 212
+    x -= PI      #należy go odkomentować w 213 linijce i zakomentować 212 jeśli chcemy użyć takiego pobudzenia
     return (1 - potega(x, 2) / silnia(2) + potega(x, 4) / silnia(4) -
              potega(x, 6) / silnia(6) + potega(x, 8) / silnia(8))
 
@@ -254,13 +254,17 @@ class Window(QDialog):
         b1 = wpis_b1
         b2 = wpis_b2
         sila = wpis_sila
-        if prost.isChecked() == True:
+        if prost.isChecked():
             przebieg = 1
-        if skok.isChecked() == True:
+        if skok.isChecked():
             przebieg = 2
-        if sinusoida.isChecked() == True:
+        if sinusoida.isChecked():
             przebieg = 3
-        self.wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
+        if(m1>0 and m2 > 0 and k1 > 0 and k2 > 0 and b1>0 and b2 > 0):
+            self.wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
+        else:
+            QMessageBox.about(self, "Błąd", "Parametry układu muszą być większe od 0!")
+
 
 if __name__ == '__main__':
     app = QApplication(sys.argv)
