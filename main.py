@@ -24,8 +24,8 @@ def potega(a, b):
 def sinus(x):
     x %= 2 * PI
     x -= PI
-    return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) - potega(x, 7) / silnia(7) + potega(x, 9) / silnia(
-        9))
+    return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) -
+             potega(x, 7) / silnia(7) + potega(x, 9) / silnia(9))
 
 
 def MatxVec(mac, wekt):
@@ -34,13 +34,6 @@ def MatxVec(mac, wekt):
         for j in range(4):
             w[i] += mac[i][j] * wekt[j]
     return w
-
-
-def VecxVec(wekt1, wekt2):
-    s = 0
-    for i in range(4):
-        s += wekt1[i] * wekt2[i]
-    return s
 
 
 def VecxSkal(wekt, skal):
