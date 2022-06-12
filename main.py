@@ -27,9 +27,9 @@ def sinus(x):
     return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) -
              potega(x, 7) / silnia(7) + potega(x, 9) / silnia(9))
 
-def mcosinus(x): #ponieważ w poleceniu jako sinus ze składową stałą umieszczony jest tak naprawdę minus cosinus,
+def mcosinus(x): #ponieważ w obrazku do polecenia jako sinus ze składową stałą umieszczony jest tak naprawdę minus cosinus,
     x %= 2 * PI  #i jest on również bardziej realistycznym pobudzeniem, został on tutaj również zaimplementowany
-    x -= PI      #należy go odkomentować w 213 linijce i zakomentować 212 jeśli chcemy użyć takiego pobudzenia
+    x -= PI      #należy go odkomentować w 213 linijce i zakomentować 212
     return (1 - potega(x, 2) / silnia(2) + potega(x, 4) / silnia(4) -
              potega(x, 6) / silnia(6) + potega(x, 8) / silnia(8))
 
@@ -58,7 +58,7 @@ def VecplusVec(wekt1, wekt2):
 class Window(QDialog):
     def __init__(self, parent=None):
         super(Window, self).__init__(parent)
-        self.setWindowTitle("Dwie Ruchome Masy")
+        self.setWindowTitle("Dwie Ruchome Masy - Poćwiardowski, Rychter")
         self.setGeometry(100, 100, 1280, 720)
         self.figure = plt.figure()
         plt.subplots_adjust(left=0.1,
@@ -190,7 +190,7 @@ class Window(QDialog):
         self.setLayout(layout)
 
     def wykonanie(self, m1, m2, k1, k2, b1, b2, przebieg, F):
-        A = [[0, 0, 1, 0],
+        A = [[0, 0, 1, 0],  #macierze
              [0, 0, 0, 1],
              [(-k1 - k2) / m1, k2 / m1, (-b1 - b2) / m1, b2 / m1],
              [k2 / m2, -k2 / m2, b2 / m2, -b2 / m2]]
@@ -260,7 +260,7 @@ class Window(QDialog):
             przebieg = 2
         if sinusoida.isChecked():
             przebieg = 3
-        if(m1>0 and m2 > 0 and k1 > 0 and k2 > 0 and b1>0 and b2 > 0):
+        if(m1>0 and m2 > 0 and k1 > 0 and k2 > 0 and b1>0 and b2 > 0): #sprawdzanie czy parametry są dodatnie
             self.wykonanie(m1, m2, k1, k2, b1, b2, przebieg, sila)
         else:
             QMessageBox.about(self, "Błąd", "Parametry układu muszą być większe od 0!")
