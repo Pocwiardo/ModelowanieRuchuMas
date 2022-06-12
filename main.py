@@ -24,9 +24,14 @@ def potega(a, b):
 def sinus(x):
     x %= 2 * PI
     x -= PI
-    return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) - potega(x, 7) / silnia(7) + potega(x, 9) / silnia(
-        9))
+    return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) -
+             potega(x, 7) / silnia(7) + potega(x, 9) / silnia(9))
 
+def mcosinus(x):
+    x %= 2 * PI
+    x -= PI
+    return (1 - potega(x, 2) / silnia(2) + potega(x, 4) / silnia(4) -
+             potega(x, 6) / silnia(6) + potega(x, 8) / silnia(8))
 
 def MatxVec(mac, wekt):
     w = [0] * 4
@@ -34,13 +39,6 @@ def MatxVec(mac, wekt):
         for j in range(4):
             w[i] += mac[i][j] * wekt[j]
     return w
-
-
-def VecxVec(wekt1, wekt2):
-    s = 0
-    for i in range(4):
-        s += wekt1[i] * wekt2[i]
-    return s
 
 
 def VecxSkal(wekt, skal):
@@ -212,6 +210,7 @@ class Window(QDialog):
                 u[i] = F if i > 0 else 0
             elif przebieg == 3:  # sinus
                 u[i] = F / 2 * sinus(w * i * h) + F / 2
+                #u[i] = F / 2 * mcosinus(w * i * h) + F / 2
 
         xi1 = [0, 0, 0, 0]  # stan - warunki początkowe
         xip = [0] * 4  # poprzednia wartość x'
