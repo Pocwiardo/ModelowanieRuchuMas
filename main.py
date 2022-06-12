@@ -27,9 +27,9 @@ def sinus(x):
     return -(x - potega(x, 3) / silnia(3) + potega(x, 5) / silnia(5) -
              potega(x, 7) / silnia(7) + potega(x, 9) / silnia(9))
 
-def mcosinus(x):
-    x %= 2 * PI
-    x -= PI
+def mcosinus(x): #ponieważ w poleceniu jako sinus ze składową stałą umieszczony jest tak naprawdę minus cosinus,
+    x %= 2 * PI  #i jest on również bardziej realistycznym pobudzeniem, został on tutaj również zaimplementowany
+    x -= PI      #należy go odkomentować w 213 linijce i zakomentować 212
     return (1 - potega(x, 2) / silnia(2) + potega(x, 4) / silnia(4) -
              potega(x, 6) / silnia(6) + potega(x, 8) / silnia(8))
 
